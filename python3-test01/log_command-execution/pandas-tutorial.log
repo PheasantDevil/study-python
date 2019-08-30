@@ -1,0 +1,281 @@
+https://paiza.hatenablog.com/entry/2018/01/24/機械学習にも便利なPythonライブラリ「Pandas」の初心者向
+
+===== =
+◆Series(1次元配列)を作ってみる
+>>> import pandas as pd
+>>>
+>>> import numpy as np
+>>>
+>>> python_list = [1,3,5,np.nan,None,-1]
+>>>
+>>> pandas_series  = pd.Series(python_list)
+>>>
+>>> print(python_list)
+[1, 3, 5, nan, None, -1]
+>>> print(pandas_series)
+0    1.0
+1    3.0
+2    5.0
+3    NaN
+4    NaN
+5   -1.0
+dtype: float64
+>>> import pandas as pd
+>>> import numpy as np
+>>> python_list = [1,3,5,-1]
+>>> pandas_series = pd.Series(python_list)
+>>> pandas_series
+0    1
+1    3
+2    5
+3   -1
+dtype: int64
+>>> python_list = [1,3.1,None,'1']
+>>> pandas_series = pd.Series(python_list)
+>>> pandas_series
+0       1
+1     3.1
+2    None
+3       1
+dtype: object
+>>> print(type(pandas_series[0]))
+<class 'int'>
+>>> print(type(pandas_series[1]))
+<class 'float'>
+>>> print(type(pandas_series[2]))
+<class 'NoneType'>
+>>> python_list = [1,3.1,None,'1']
+>>> pandas_series = pd.Series(python_list)
+>>> pandas_series
+0       1
+1     3.1
+2    None
+3       1
+dtype: object
+>>> print(type(pandas_series[0]))
+<class 'int'>
+>>> print(type(pandas_series[1]))
+<class 'float'>
+>>> print(type(pandas_series[2]))
+<class 'NoneType'>
+>>> print(type(pandas_series[3]))
+<class 'str'>
+
+===== =
+===== =
+◆DataFrame(二次元配列)を作ってみる
+>>> import pandas as pd
+>>> import numpy as np
+>>> python_list = [['alice', 100],['bob', 90], ['charlie', 85]]
+>>> pandas_dataframe = pd.DataFrame(python_list)
+>>> pandas_dataframe
+         0    1
+0    alice  100
+1      bob   90
+2  charlie   85
+>>> python_list = [['alice', 100],['bob', 90], ['charlie', 85]]
+>>> pandas_dataframe = pd.DataFrame(python_list, columns=['name', 'score'])
+>>> pandas_dataframe
+      name  score
+0    alice    100
+1      bob     90
+2  charlie     85
+>>> pandas_dataframe.name
+0      alice
+1        bob
+2    charlie
+Name: name, dtype: object
+>>> pandas_dataframe.score
+0    100
+1     90
+2     85
+Name: score, dtype: int64
+
+===== =
+===== =
+◆concat関数を使ってみる
+    SeriesからDataFrameを作る
+>>> import pandas as pd
+>>> import numpy as np
+>>> names = ['alice', 'bob', 'charlie']
+>>> scores = [100, 90, 85]
+>>> names_series = pd.Series(names)
+>>> scores_series = pd.Series(scores)
+>>> pandas_dataframe = pd.concat([names_series, scores_series], axis=1)
+>>> pandas_dataframe
+         0    1
+0    alice  100
+1      bob   90
+2  charlie   85
+>>> pandas_dataframe1 = pd.concat([names_series, scores_series], axis=1)
+>>>
+>>> names = ['dave', 'ellen', 'frank']
+>>> scores = [20, 80, 95]
+>>> names_series = pd.Series(names)
+>>> scores_series = pd.Series(scores)
+>>> pandas_dataframe2 = pd.concat([names_series, scores_series], axis=1)
+>>>
+>>> pandas_dataframe3 = pd.concat([pandas_dataframe1, pandas_dataframe2])
+>>> pandas_dataframe3
+         0    1
+0    alice  100
+1      bob   90
+2  charlie   85
+0     dave   20
+1    ellen   80
+2    frank   95
+
+===== =
+===== =
+◆mergeを使って結合してみる
+    DataFrameのmergeを使った結合
+>>> import pandas as pd
+>>> import numpy as np
+>>>
+>>> names = [{'id':0,'name':'alice','age':21}, {'id':1, 'name':'bob','age':24}, {'id':2, 'name':'charlie','age':22}, {'id':4, 'name':'dave','age':None}]
+>>> names_dataframe = pd.DataFrame(names)
+>>> names_dataframe
+    age  id     name
+0  21.0   0    alice
+1  24.0   1      bob
+2  22.0   2  charlie
+3   NaN   4     dave
+>>>
+>>> scores = [{'id':0,'score':100, 'retest':True}, {'id':1, 'score':90, 'retest':False}, {'id':2, 'score':85, 'retest':True}, {'id':3, 'score':0, 'retest':False}]
+>>> scores_dataframe = pd.DataFrame(scores)
+>>> scores_dataframe
+   id  retest  score
+0   0    True    100
+1   1   False     90
+2   2    True     85
+3   3   False      0
+>>> pd.merge(names_dataframe, scores_dataframe)
+    age  id     name  retest  score
+0  21.0   0    alice    True    100
+1  24.0   1      bob   False     90
+2  22.0   2  charlie    True     85
+>>> pd.merge(names_dataframe, scores_dataframe, how='right')
+    age  id     name  retest  score
+0  21.0   0    alice    True    100
+1  24.0   1      bob   False     90
+2  22.0   2  charlie    True     85
+3   NaN   3      NaN   False      0
+>>> pd.merge(names_dataframe, scores_dataframe, on='id')
+    age  id     name  retest  score
+0  21.0   0    alice    True    100
+1  24.0   1      bob   False     90
+2  22.0   2  charlie    True     85
+>>> pd.merge(names_dataframe, scores_dataframe, left_on='id', right_on='id')
+    age  id     name  retest  score
+0  21.0   0    alice    True    100
+1  24.0   1      bob   False     90
+2  22.0   2  charlie    True     85
+>>> names = [{'id':0,'name':'alice','age':21}, {'id':1, 'name':'bob','age':24}, {'id':2, 'name':'charlie','age':22}, {'id':4, 'name':'dave','age':None}]
+>>> names_dataframe = pd.DataFrame(names)
+>>> names_dataframe
+    age  id     name
+0  21.0   0    alice
+1  24.0   1      bob
+2  22.0   2  charlie
+3   NaN   4     dave
+>>> scores = [{'id':0,'score':100, 'retest':True, 'age':21}, {'id':1, 'score':90, 'retest':False, 'age':23}, {'id':2, 'score':85, 'retest':True, 'age':22}, {'id':3, 'score':0, 'retest':False, 'age':20}]
+>>> scores_dataframe = pd.DataFrame(scores)
+>>> scores_dataframe
+   age  id  retest  score
+0   21   0    True    100
+1   23   1   False     90
+2   22   2    True     85
+3   20   3   False      0
+>>> pd.merge(names_dataframe, scores_dataframe)
+    age  id     name  retest  score
+0  21.0   0    alice    True    100
+1  22.0   2  charlie    True     85
+
+===== =
+===== =
+◆絞り込みをしてみる
+    pandas上でのデータの絞り込み
+>>> dataframe = pd.DataFrame(np.random.random_sample(80).reshape((20, 4)), columns=['A', 'B', 'C', 'D'])
+>>> dataframe
+           A         B         C         D
+0   0.019530  0.322156  0.360388  0.956442
+1   0.532155  0.215818  0.678180  0.383630
+2   0.811433  0.838904  0.598387  0.878443
+3   0.152991  0.181279  0.413151  0.773504
+4   0.850295  0.968593  0.060283  0.047497
+5   0.915926  0.609006  0.211500  0.697402
+6   0.073956  0.263640  0.087762  0.196102
+7   0.647752  0.959645  0.116715  0.670780
+8   0.048232  0.747424  0.987841  0.524583
+9   0.632257  0.043137  0.416846  0.412970
+10  0.242211  0.260780  0.714341  0.820706
+11  0.085839  0.224939  0.464781  0.776133
+12  0.856765  0.636423  0.512158  0.786091
+13  0.315567  0.823095  0.181284  0.974528
+14  0.873811  0.188258  0.430783  0.855119
+15  0.102285  0.333096  0.076274  0.580037
+16  0.533802  0.120855  0.400939  0.520037
+17  0.553929  0.266775  0.446426  0.246944
+18  0.956222  0.857167  0.711445  0.250941
+19  0.784394  0.756450  0.716801  0.963500
+>>> dataframe[dataframe.A > 0.5]
+           A         B         C         D
+1   0.532155  0.215818  0.678180  0.383630
+2   0.811433  0.838904  0.598387  0.878443
+4   0.850295  0.968593  0.060283  0.047497
+5   0.915926  0.609006  0.211500  0.697402
+7   0.647752  0.959645  0.116715  0.670780
+9   0.632257  0.043137  0.416846  0.412970
+12  0.856765  0.636423  0.512158  0.786091
+14  0.873811  0.188258  0.430783  0.855119
+16  0.533802  0.120855  0.400939  0.520037
+17  0.553929  0.266775  0.446426  0.246944
+18  0.956222  0.857167  0.711445  0.250941
+19  0.784394  0.756450  0.716801  0.963500
+>>> dataframe[(dataframe.A > 0.5) | (dataframe.B > 0.5)]
+           A         B         C         D
+1   0.532155  0.215818  0.678180  0.383630
+2   0.811433  0.838904  0.598387  0.878443
+4   0.850295  0.968593  0.060283  0.047497
+5   0.915926  0.609006  0.211500  0.697402
+7   0.647752  0.959645  0.116715  0.670780
+8   0.048232  0.747424  0.987841  0.524583
+9   0.632257  0.043137  0.416846  0.412970
+12  0.856765  0.636423  0.512158  0.786091
+13  0.315567  0.823095  0.181284  0.974528
+14  0.873811  0.188258  0.430783  0.855119
+16  0.533802  0.120855  0.400939  0.520037
+17  0.553929  0.266775  0.446426  0.246944
+18  0.956222  0.857167  0.711445  0.250941
+19  0.784394  0.756450  0.716801  0.963500
+>>> dataframe[(dataframe.A > 0.5) & (dataframe.B > 0.5)]
+           A         B         C         D
+2   0.811433  0.838904  0.598387  0.878443
+4   0.850295  0.968593  0.060283  0.047497
+5   0.915926  0.609006  0.211500  0.697402
+7   0.647752  0.959645  0.116715  0.670780
+12  0.856765  0.636423  0.512158  0.786091
+18  0.956222  0.857167  0.711445  0.250941
+19  0.784394  0.756450  0.716801  0.963500
+>>> dataframe[(dataframe.A > 0.5) & ~  (dataframe.B > 0.5)]
+           A         B         C         D
+1   0.532155  0.215818  0.678180  0.383630
+9   0.632257  0.043137  0.416846  0.412970
+14  0.873811  0.188258  0.430783  0.855119
+16  0.533802  0.120855  0.400939  0.520037
+17  0.553929  0.266775  0.446426  0.246944
+>>> dataframe.where(dataframe.A > 0.5).dropna()
+           A         B         C         D
+1   0.532155  0.215818  0.678180  0.383630
+2   0.811433  0.838904  0.598387  0.878443
+4   0.850295  0.968593  0.060283  0.047497
+5   0.915926  0.609006  0.211500  0.697402
+7   0.647752  0.959645  0.116715  0.670780
+9   0.632257  0.043137  0.416846  0.412970
+12  0.856765  0.636423  0.512158  0.786091
+14  0.873811  0.188258  0.430783  0.855119
+16  0.533802  0.120855  0.400939  0.520037
+17  0.553929  0.266775  0.446426  0.246944
+18  0.956222  0.857167  0.711445  0.250941
+19  0.784394  0.756450  0.716801  0.963500
+

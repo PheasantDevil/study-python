@@ -2,6 +2,9 @@
 
 # dependencies
 */*site-packages*
+/py27env/Lib/site-packages
+/py37env/Lib/site-packages
+/python3-test01/Lib/site-packages
 
 # testing
 

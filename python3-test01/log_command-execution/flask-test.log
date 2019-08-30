@@ -1,0 +1,12 @@
+C:\Project\python3-test01>Scripts\activate
+
+(python3-test01) C:\Project\python3-test01>set HTTP_PROXY=http://konishi.kenji.z8%40tex-sol.com:pass@@19@172.16.16.3:15080/
+
+(python3-test01) C:\Project\python3-test01>set HTTPS_PROXY=http://konishi.kenji.z8%40tex-sol.com:pass@@19@172.16.16.3:15080/
+
+(python3-test01) C:\Project\python3-test01>python -m pip install -U pylint
+
+(python3-test01) C:\Project\python3-test01>python -m pip install -U autopep8
+
+(python3-test01) C:\Project\python3-test01>python -m pip install --upgrade pip
+
